@@ -98,7 +98,7 @@ export default function DispatchTable({ date }: DispatchTableProps) {
         return (
             <div className="flex flex-col space-y-1 w-full min-w-[160px]">
                 <select
-                    className="border border-gray-300 rounded p-1 text-sm w-full bg-blue-50 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="border border-gray-300 rounded p-1 text-sm w-full bg-blue-50 text-gray-900 font-bold focus:ring-2 focus:ring-blue-500 outline-none"
                     value={entry.pickup || ''}
                     onChange={(e) => handleChange(vehicleId, slotIndex, 'pickup', e.target.value)}
                 >
@@ -150,7 +150,7 @@ export default function DispatchTable({ date }: DispatchTableProps) {
                                         <div key={slotIndex} className="flex-shrink-0 w-28">
                                             <div className="flex flex-col space-y-0.5 w-full">
                                                 <select
-                                                    className="border border-gray-300 rounded p-0 text-[10px] h-6 w-full bg-blue-50 text-gray-900 focus:ring-1 focus:ring-blue-500 outline-none"
+                                                    className="border border-gray-300 rounded p-0 text-xs h-7 w-full bg-blue-50 text-gray-900 font-bold focus:ring-1 focus:ring-blue-500 outline-none"
                                                     value={entry.pickup || ''}
                                                     onChange={(e) => handleChange(vehicleId, slotIndex, 'pickup', e.target.value)}
                                                 >
