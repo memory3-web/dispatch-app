@@ -134,19 +134,48 @@ export default function DispatchTable({ date }: DispatchTableProps) {
             {/* Mobile View (Compact Horizontal Scroll) */}
             <div className="md:hidden bg-white rounded-lg shadow overflow-hidden">
                 {VEHICLES.map(vehicleId => (
-                    <div key={vehicleId} className="flex items-center border-b last:border-b-0 h-24">
+                    <div key={vehicleId} className="flex items-center border-b last:border-b-0 h-16">
                         {/* Fixed Vehicle ID Column */}
-                        <div className="w-16 flex-shrink-0 flex items-center justify-center bg-gray-100 h-full border-r font-bold text-gray-900 text-lg">
+                        <div className="w-10 flex-shrink-0 flex items-center justify-center bg-gray-100 h-full border-r font-bold text-gray-900 text-sm">
                             {vehicleId}
                         </div>
 
                         {/* Scrollable Slots */}
-                        <div className="flex-1 overflow-x-auto flex items-center space-x-2 p-2 h-full no-scrollbar">
-                            {[0, 1, 2].map(slotIndex => (
-                                <div key={slotIndex} className="flex-shrink-0 w-40">
-                                    {renderInputGroup(vehicleId, slotIndex)}
-                                </div>
-                            ))}
+                        <div className="flex-1 overflow-x-auto flex items-center space-x-1 p-1 h-full no-scrollbar">
+                            {[0, 1, 2].map(slotIndex => {
+                                const key = `${vehicleId}-${slotIndex}`;
+                                const entry = entries[key] || { pickup: '', delivery: '' };
+                                return (
+                                    <div key={slotIndex} className="flex-shrink-0 w-28">
+                                        <div className="flex flex-col space-y-0.5 w-full">
+                                            <select
+                                                className="border border-gray-300 rounded p-0 text-[10px] h-6 w-full bg-blue-50 text-gray-900 focus:ring-1 focus:ring-blue-500 outline-none"
+                                                value={entry.pickup || ''}
+                                                onChange={(e) => handleChange(vehicleId, slotIndex, 'pickup', e.target.value)}
+                                            >
+                                                <option value="" className="text-gray-500">選択...</option>
+                                                {PICKUP_LOCATIONS.map(loc => (
+                                                    <option key={loc} value={loc} className="text-gray-900">{loc}</option>
+                                                ))}
+                                            </select>
+                                            <input
+                                                type="text"
+                                                placeholder="概要"
+                                                className="border border-gray-300 rounded p-0 px-1 text-[10px] h-6 w-full text-gray-900 placeholder-gray-400 focus:ring-1 focus:ring-blue-500 outline-none"
+                                                value={entry.delivery || ''}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    setEntries(prev => ({
+                                                        ...prev,
+                                                        [key]: { ...prev[key], date, vehicleId, slotIndex, delivery: val } as DispatchEntry
+                                                    }));
+                                                }}
+                                                onBlur={() => handleBlur(vehicleId, slotIndex)}
+                                            />
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 ))}
