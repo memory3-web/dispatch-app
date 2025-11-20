@@ -76,7 +76,7 @@ export default function DispatchTable({ date }: DispatchTableProps) {
         }));
 
         if (field === 'pickup') {
-            saveEntry(newEntry);
+            // saveEntry(newEntry); // Removed auto-save on change for pickup to allow typing
         } else {
             // For text input, we rely on onBlur for saving
         }
@@ -97,16 +97,15 @@ export default function DispatchTable({ date }: DispatchTableProps) {
         const entry = entries[key] || { pickup: '', delivery: '' };
         return (
             <div className="flex flex-col space-y-1 w-full min-w-[160px]">
-                <select
+                <input
+                    list="pickup-locations"
+                    type="text"
+                    placeholder="..."
                     className="border border-gray-300 rounded p-1 text-sm w-full bg-blue-50 text-gray-900 font-bold focus:ring-2 focus:ring-blue-500 outline-none"
                     value={entry.pickup || ''}
                     onChange={(e) => handleChange(vehicleId, slotIndex, 'pickup', e.target.value)}
-                >
-                    <option value="" className="text-gray-500">...</option>
-                    {PICKUP_LOCATIONS.map(loc => (
-                        <option key={loc} value={loc} className="text-gray-900">{loc}</option>
-                    ))}
-                </select>
+                    onBlur={() => handleBlur(vehicleId, slotIndex)}
+                />
                 <input
                     type="text"
                     placeholder=""
@@ -149,16 +148,15 @@ export default function DispatchTable({ date }: DispatchTableProps) {
                                     return (
                                         <div key={slotIndex} className="flex-shrink-0 w-28">
                                             <div className="flex flex-col space-y-0.5 w-full">
-                                                <select
+                                                <input
+                                                    list="pickup-locations"
+                                                    type="text"
+                                                    placeholder="..."
                                                     className="border border-gray-300 rounded p-0 text-xs h-7 w-full bg-blue-50 text-gray-900 font-bold focus:ring-1 focus:ring-blue-500 outline-none"
                                                     value={entry.pickup || ''}
                                                     onChange={(e) => handleChange(vehicleId, slotIndex, 'pickup', e.target.value)}
-                                                >
-                                                    <option value="" className="text-gray-500">...</option>
-                                                    {PICKUP_LOCATIONS.map(loc => (
-                                                        <option key={loc} value={loc} className="text-gray-900">{loc}</option>
-                                                    ))}
-                                                </select>
+                                                    onBlur={() => handleBlur(vehicleId, slotIndex)}
+                                                />
                                                 <input
                                                     type="text"
                                                     placeholder=""
@@ -210,6 +208,11 @@ export default function DispatchTable({ date }: DispatchTableProps) {
                     </tbody>
                 </table>
             </div>
+            <datalist id="pickup-locations">
+                {PICKUP_LOCATIONS.map(loc => (
+                    <option key={loc.name} value={loc.name}>{loc.reading}</option>
+                ))}
+            </datalist>
         </div>
     );
 }
